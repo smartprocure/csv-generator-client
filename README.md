@@ -2,7 +2,7 @@
 Library to generate downloadable csv files from client side data. 
 
 # Installing
-`npm install -save https://github.com/smartprocure/csv-generator-client.git`
+`npm install csv-generator-client`
 
 This package requires `lodash/fp`, so make sure that's available in your app.
 
