@@ -1,0 +1,45 @@
+{
+  "name": "csv-generator-client",
+  "version": "1.0.0",
+  "description": "Library to generate downloadable csv files from client side data.",
+  "main": "lib/csv-generator-client.js",
+  "scripts": {
+    "build": "webpack",
+    "prettier": "prettier --write *.js; prettier --write '{src,test}/**/*.js'"
+  },
+  "babel": {
+    "presets": [
+      "env"
+    ]
+  },
+  "prettier": {
+    "singleQuote": true,
+    "semi": false,
+    "trailingComma": "es5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smartprocure/csv-generator-client.git"
+  },
+  "keywords": [
+    "client",
+    "csv",
+    "download"
+  ],
+  "author": "Geovanny F. Fajardo <gfajardo@smartprocure.us>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/smartprocure/csv-generator-client/issues"
+  },
+  "homepage": "https://github.com/smartprocure/csv-generator-client#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "prettier": "^1.7.4",
+    "webpack": "^3.8.1"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4"
+  }
+}
