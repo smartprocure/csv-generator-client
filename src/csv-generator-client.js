@@ -33,7 +33,7 @@ let initSettings = ({ separator = ',', addQuotes = false } = {}, fileName, dataA
   }
 
   if (!_.isArray(dataArray)) {
-    throw 'An data array is required.'
+    throw 'A data array is required.'
   }
 
   return {separator, fileName, dataArray}
@@ -49,7 +49,7 @@ let _getLinkElement = (settings, fileName, dataArray) => {
 
 export const generateDownloadLinkElement = window.navigator.msSaveBlob && _getLinkElement
 
-export const generateDownloader = _.curry(function (settings, fileName, dataArray) {
+export const download = function (settings, fileName, dataArray) {
   let {separator} = initSettings(...arguments)
   if (window.navigator.msSaveBlob) {
     let blob = new Blob([decodeURIComponent(encodeURI(getData(separator, dataArray)))], {
@@ -63,4 +63,4 @@ export const generateDownloader = _.curry(function (settings, fileName, dataArra
     linkElement.click()
     document.body.removeChild(linkElement)
   }
-})
+}
