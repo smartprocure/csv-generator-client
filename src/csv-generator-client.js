@@ -63,7 +63,7 @@ export const getLinkElement = (settings, fileName, dataArray) => {
 export const download = function ({settings, fileName, dataArray}) {
   let {separator} = initSettings(settings, fileName, dataArray)
   if (window.navigator.msSaveBlob) {
-    ieDownload(separator, dataArray)
+    ieDownload(fileName, separator, dataArray)
   } else {
     let linkElement = getLinkElement(settings, fileName, dataArray)
     linkElement.style.display = 'none'
