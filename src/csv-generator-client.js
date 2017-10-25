@@ -57,8 +57,8 @@ export const getLinkElement = (settings, fileName, dataArray) => {
     }
   } else {
     linkElement.href = getDownloadLink(separator, dataArray)
-  }
-  linkElement.download = fileName
+    linkElement.download = fileName
+  }  
   return linkElement
 }
 
