@@ -8,8 +8,8 @@ let getDownloadLink = (separator, dataArray) => {
   return type + ',' + getData(separator, dataArray)
 }
 
-let getData = function(separator) { 
-  return _.flow(
+let getData = (separator, dataArray) =>  
+  _.flow(
     _.map(row => row.join(separator)),
     data => data.join('\r\n'),
     data => {
@@ -22,8 +22,7 @@ let getData = function(separator) {
       }
       return data
     }
-  )
-}
+  )(dataArray)
 
 let initSettings = ({ separator = ',', addQuotes = false } = {}, fileName, dataArray) => {
   if (addQuotes) {
