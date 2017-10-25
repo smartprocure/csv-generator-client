@@ -40,7 +40,7 @@ let initSettings = ({ separator = ',', addQuotes = false } = {}, fileName, dataA
 }
 
 let _getLinkElement = (settings, fileName, dataArray) => {
-  let {separator} = initSettings(...args)
+  let {separator} = initSettings(...arguments)
   let linkElement = document.createElement('a')
   linkElement.href = getDownloadLink(separator, dataArray)
   linkElement.download = fileName
@@ -50,7 +50,7 @@ let _getLinkElement = (settings, fileName, dataArray) => {
 export const generateDownloadLinkElement = window.navigator.msSaveBlob && _getLinkElement
 
 export const generateDownloader = _.curry(function (settings, fileName, dataArray) {
-  let {separator} = initSettings(...args)
+  let {separator} = initSettings(...arguments)
   if (window.navigator.msSaveBlob) {
     let blob = new Blob([decodeURIComponent(encodeURI(getData(separator, dataArray)))], {
       type: 'text/csv;charset=utf-8;',
