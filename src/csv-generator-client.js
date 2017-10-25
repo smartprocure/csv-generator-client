@@ -52,7 +52,9 @@ export const getLinkElement = (settings, fileName, dataArray) => {
   let linkElement = document.createElement('a')
   if (window.navigator.msSaveBlob) {
     linkElement.href = '#'
-    linkElement.onclick = ieDownload(separator, fileName, dataArray)
+    linkElement.onclick = () => {
+      ieDownload(separator, fileName, dataArray)
+    }
   } else {
     linkElement.href = getDownloadLink(separator, dataArray)
   }
