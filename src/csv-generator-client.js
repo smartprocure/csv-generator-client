@@ -40,25 +40,34 @@ let initSettings = ({ separator = ',', addQuotes = false } = {}, fileName, dataA
   return {separator, fileName, dataArray}
 }
 
-let _getLinkElement = (settings, fileName, dataArray) => {
+let ieDownload = (separator, dataArray) => {
+  let blob = new Blob([decodeURIComponent(encodeURI(getData(separator, dataArray)))], {
+    type: 'text/csv;charset=utf-8;',
+  })
+  window.navigator.msSaveBlob(blob, fileName)
+}
+
+let getLinkElement = (settings, fileName, dataArray) => {
   let {separator} = initSettings(settings, fileName, dataArray)
   let linkElement = document.createElement('a')
-  linkElement.href = getDownloadLink(separator, dataArray)
+  if (window.navigator.msSaveBlob) {
+    linkElement.href = '#'
+    linkElement.onclick = ieDownload(separator, dataArray)
+  } else {
+    linkElement.href = getDownloadLink(separator, dataArray)
+  }
   linkElement.download = fileName
   return linkElement
 }
 
-export const generateDownloadLinkElement = window.navigator.msSaveBlob ? _getLinkElement : () => {throw 'Not supported under Internet Exploder.'}
+export const generateDownloadLinkElement = getLinkElement
 
 export const download = function (settings, fileName, dataArray) {
   let {separator} = initSettings(settings, fileName, dataArray)
   if (window.navigator.msSaveBlob) {
-    let blob = new Blob([decodeURIComponent(encodeURI(getData(separator, dataArray)))], {
-      type: 'text/csv;charset=utf-8;',
-    })
-    window.navigator.msSaveBlob(blob, fileName)
+    ieDownload(separator, dataArray)
   } else {
-    let linkElement = _getLinkElement(settings, fileName, dataArray)
+    let linkElement = getLinkElement(settings, fileName, dataArray)
     linkElement.style.display = 'none'
     document.body.appendChild(linkElement)
     linkElement.click()
