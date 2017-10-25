@@ -8,20 +8,22 @@ let getDownloadLink = (separator, dataArray) => {
   return type + ',' + getData(separator, dataArray)
 }
 
-let getData = separator => _.flow(
-  _.map(row => row.join(separator)),
-  data => data.join('\r\n'),
-  data => {
-    if (window.navigator.msSaveOrOpenBlob) {
+let getData = function(separator) { 
+  return _.flow(
+    _.map(row => row.join(separator)),
+    data => data.join('\r\n'),
+    data => {
+      if (window.navigator.msSaveOrOpenBlob) {
+        return data
+      } else if (typeof btoa === 'function') {
+        data = btoa(data)
+      } else {
+        data = encodeURIComponent(data)
+      }
       return data
-    } else if (typeof btoa === 'function') {
-      data = btoa(data)
-    } else {
-      data = encodeURIComponent(data)
     }
-    return data
-  }
-)
+  )
+}
 
 let initSettings = ({ separator = ',', addQuotes = false } = {}, fileName, dataArray) => {
   if (addQuotes) {
