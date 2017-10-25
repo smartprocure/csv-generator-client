@@ -40,7 +40,7 @@ let initSettings = ({ separator = ',', addQuotes = false } = {}, fileName, dataA
   return {separator, fileName, dataArray}
 }
 
-let ieDownload = (separator, dataArray) => {
+let ieDownload = (separator, fileName, dataArray) => {
   let blob = new Blob([decodeURIComponent(encodeURI(getData(separator, dataArray)))], {
     type: 'text/csv;charset=utf-8;',
   })
@@ -52,7 +52,7 @@ export const getLinkElement = (settings, fileName, dataArray) => {
   let linkElement = document.createElement('a')
   if (window.navigator.msSaveBlob) {
     linkElement.href = '#'
-    linkElement.onclick = ieDownload(separator, dataArray)
+    linkElement.onclick = ieDownload(separator, fileName, dataArray)
   } else {
     linkElement.href = getDownloadLink(separator, dataArray)
   }
