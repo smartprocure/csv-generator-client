@@ -48,9 +48,9 @@ let _getLinkElement = (settings, fileName, dataArray) => {
   return linkElement
 }
 
-export const generateDownloadLinkElement = window.navigator.msSaveBlob && _getLinkElement
+export const generateDownloadLinkElement = window.navigator.msSaveBlob ? _getLinkElement : () => {throw 'Not supported under Internet Exploder.'}
 
-export const download = _.curry(function (settings, fileName, dataArray) {
+export const download = function (settings, fileName, dataArray) {
   let {separator} = initSettings(settings, fileName, dataArray)
   if (window.navigator.msSaveBlob) {
     let blob = new Blob([decodeURIComponent(encodeURI(getData(separator, dataArray)))], {
@@ -64,4 +64,4 @@ export const download = _.curry(function (settings, fileName, dataArray) {
     linkElement.click()
     document.body.removeChild(linkElement)
   }
-})
+}
