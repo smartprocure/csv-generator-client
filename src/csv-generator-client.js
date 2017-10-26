@@ -1,22 +1,21 @@
 import _ from 'lodash/fp'
 
-let getDownloadLink = (separator, dataArray) => {
-  let type = 'data:text/csv;charset=utf-8'
-  if (typeof btoa === 'function') {
-    type += ';base64'
-  }
-  return type + ',' + getData(separator, dataArray)
-}
+// Aliases for unit testing purposes.
+let _btoa =
+  (typeof btoa !== 'undefined' && btoa) ||
+  (typeof Buffer !== 'undefined' && (s => Buffer.from(s).toString('base64')))
+let _window = (typeof window !== 'undefined' && window) || null
 
-let getData = (separator, dataArray) =>
+// This is exported for unit testing purposes.
+export const getData = (separator, dataArray) =>
   _.flow(
     _.map(row => row.join(separator)),
     data => data.join('\r\n'),
     data => {
-      if (window.navigator.msSaveOrOpenBlob) {
+      if (_.has('navigator.msSaveOrOpenBlob', _window)) {
         return data
-      } else if (typeof btoa === 'function') {
-        data = btoa(data)
+      } else if (typeof _btoa === 'function') {
+        data = _btoa(data)
       } else {
         data = encodeURIComponent(data)
       }
@@ -24,7 +23,8 @@ let getData = (separator, dataArray) =>
     }
   )(dataArray)
 
-let initSettings = (
+// This is exported for unit testing purposes.
+export const initSettings = (
   { separator = ',', addQuotes = false } = {},
   fileName,
   dataArray
@@ -44,6 +44,14 @@ let initSettings = (
   return { separator, fileName, dataArray }
 }
 
+let getDownloadLink = (separator, dataArray) => {
+  let type = 'data:text/csv;charset=utf-8'
+  if (typeof btoa === 'function') {
+    type += ';base64'
+  }
+  return type + ',' + getData(separator, dataArray)
+}
+
 let ieDownload = (separator, fileName, dataArray) => {
   let blob = new Blob(
     [decodeURIComponent(encodeURI(getData(separator, dataArray)))],
@@ -51,13 +59,13 @@ let ieDownload = (separator, fileName, dataArray) => {
       type: 'text/csv;charset=utf-8;',
     }
   )
-  window.navigator.msSaveBlob(blob, fileName)
+  _window.navigator.msSaveBlob(blob, fileName)
 }
 
-export const getLinkElement = ({settings, fileName, dataArray}) => {
+export const getLinkElement = ({ settings, fileName, dataArray }) => {
   let { separator } = initSettings(settings, fileName, dataArray)
   let linkElement = document.createElement('a')
-  if (window.navigator.msSaveBlob) {
+  if (_.has('navigator.msSaveBlob', _window)) {
     linkElement.href = '#'
     linkElement.onclick = () => {
       ieDownload(separator, fileName, dataArray)
@@ -71,10 +79,10 @@ export const getLinkElement = ({settings, fileName, dataArray}) => {
 
 export const download = function({ settings, fileName, dataArray }) {
   let { separator } = initSettings(settings, fileName, dataArray)
-  if (window.navigator.msSaveBlob) {
+  if (_.has('navigator.msSaveBlob', _window)) {
     ieDownload(separator, fileName, dataArray)
   } else {
-    let linkElement = getLinkElement({settings, fileName, dataArray})
+    let linkElement = getLinkElement({ settings, fileName, dataArray })
     linkElement.style.display = 'none'
     document.body.appendChild(linkElement)
     linkElement.click()
