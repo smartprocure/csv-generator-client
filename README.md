@@ -8,18 +8,24 @@ This package requires `lodash/fp`, so make sure that's available in your app.
 
 # Usage
 ```
-import * as CsvGenerator from 'csv-generator-client'
+import * as generator from 'csv-generator-client'
+let settings = {separator: '|', addQuotes: true}
+generator.download({settings, fileName, dataArray})
 
-let generator = CsvGenerator.getClientInstance()
-generator.download(fileName, data)
+Or
+
+var generator = require('csv-generator-client')
+// In this case the default settings are used.
+generator.download({fileName: fileName, dataArray: dataArray})
+
 ```
 # API
 
-### getClientInstance
-`getClientInstance(settings)` Where settings is an object. Default settings are  `{ separator: ',', addQuotes: false }` .
+### getLinkElement
+`getLinkElement({settings: settings, fileName: fileName, dataArray: dataArray})` Where settings is an object and default settings are  `{ separator: ',', addQuotes: false }`, `fileName` is required and `dataArray` is required to be of type `Array`.
 
 ### download
-`instance.download(fileName, dataArray)` Where `fileName` is required and `dataArray` is required to be of type `Array`.
+`download({settings: settings, fileName: fileName, dataArray: dataArray})` Where settings is an object and default settings are  `{ separator: ',', addQuotes: false }`, `fileName` is required and `dataArray` is required to be of type `Array`.
 
 
 # Credits
