@@ -12,7 +12,7 @@ export const getData = (separator, dataArray) =>
     _.map(row => row.join(separator)),
     data => data.join('\r\n'),
     data => {
-      if (_.has('navigator.msSaveOrOpenBlob', _window)) {
+      if (_window && _window.navigator.msSaveOrOpenBlob) {
         return data
       } else if (typeof _btoa === 'function') {
         data = _btoa(data)
@@ -65,7 +65,7 @@ let ieDownload = (separator, fileName, dataArray) => {
 export const getLinkElement = ({ settings, fileName, dataArray }) => {
   let { separator } = initSettings(settings, fileName, dataArray)
   let linkElement = document.createElement('a')
-  if (_.has('navigator.msSaveBlob', _window)) {
+  if (_window && _window.navigator.msSaveBlob) {
     linkElement.href = '#'
     linkElement.onclick = () => {
       ieDownload(separator, fileName, dataArray)
@@ -79,7 +79,7 @@ export const getLinkElement = ({ settings, fileName, dataArray }) => {
 
 export const download = function({ settings, fileName, dataArray }) {
   let { separator } = initSettings(settings, fileName, dataArray)
-  if (_.has('navigator.msSaveBlob', _window)) {
+  if (_window && _window.navigator.msSaveBlob) {
     ieDownload(separator, fileName, dataArray)
   } else {
     let linkElement = getLinkElement({ settings, fileName, dataArray })
