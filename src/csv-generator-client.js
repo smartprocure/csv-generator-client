@@ -54,7 +54,7 @@ let ieDownload = (separator, fileName, dataArray) => {
   window.navigator.msSaveBlob(blob, fileName)
 }
 
-export const getLinkElement = (settings, fileName, dataArray) => {
+export const getLinkElement = ({settings, fileName, dataArray}) => {
   let { separator } = initSettings(settings, fileName, dataArray)
   let linkElement = document.createElement('a')
   if (window.navigator.msSaveBlob) {
@@ -74,7 +74,7 @@ export const download = function({ settings, fileName, dataArray }) {
   if (window.navigator.msSaveBlob) {
     ieDownload(separator, fileName, dataArray)
   } else {
-    let linkElement = getLinkElement(settings, fileName, dataArray)
+    let linkElement = getLinkElement({settings, fileName, dataArray})
     linkElement.style.display = 'none'
     document.body.appendChild(linkElement)
     linkElement.click()
