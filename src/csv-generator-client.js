@@ -8,7 +8,7 @@ let getDownloadLink = (separator, dataArray) => {
   return type + ',' + getData(separator, dataArray)
 }
 
-let getData = (separator, dataArray) =>  
+let getData = (separator, dataArray) =>
   _.flow(
     _.map(row => row.join(separator)),
     data => data.join('\r\n'),
@@ -24,7 +24,11 @@ let getData = (separator, dataArray) =>
     }
   )(dataArray)
 
-let initSettings = ({ separator = ',', addQuotes = false } = {}, fileName, dataArray) => {
+let initSettings = (
+  { separator = ',', addQuotes = false } = {},
+  fileName,
+  dataArray
+) => {
   if (addQuotes) {
     separator = `"${separator}"`
   }
@@ -37,18 +41,21 @@ let initSettings = ({ separator = ',', addQuotes = false } = {}, fileName, dataA
     throw 'A data array is required.'
   }
 
-  return {separator, fileName, dataArray}
+  return { separator, fileName, dataArray }
 }
 
 let ieDownload = (separator, fileName, dataArray) => {
-  let blob = new Blob([decodeURIComponent(encodeURI(getData(separator, dataArray)))], {
-    type: 'text/csv;charset=utf-8;',
-  })
+  let blob = new Blob(
+    [decodeURIComponent(encodeURI(getData(separator, dataArray)))],
+    {
+      type: 'text/csv;charset=utf-8;',
+    }
+  )
   window.navigator.msSaveBlob(blob, fileName)
 }
 
 export const getLinkElement = (settings, fileName, dataArray) => {
-  let {separator} = initSettings(settings, fileName, dataArray)
+  let { separator } = initSettings(settings, fileName, dataArray)
   let linkElement = document.createElement('a')
   if (window.navigator.msSaveBlob) {
     linkElement.href = '#'
@@ -58,12 +65,12 @@ export const getLinkElement = (settings, fileName, dataArray) => {
   } else {
     linkElement.href = getDownloadLink(separator, dataArray)
     linkElement.download = fileName
-  }  
+  }
   return linkElement
 }
 
-export const download = function ({settings, fileName, dataArray}) {
-  let {separator} = initSettings(settings, fileName, dataArray)
+export const download = function({ settings, fileName, dataArray }) {
+  let { separator } = initSettings(settings, fileName, dataArray)
   if (window.navigator.msSaveBlob) {
     ieDownload(separator, fileName, dataArray)
   } else {
