@@ -9,6 +9,7 @@ This package requires `lodash/fp`, so make sure that's available in your app.
 # Usage
 ```
 import * as generator from 'csv-generator-client'
+
 let settings = {separator: '|', addQuotes: true}
 generator.download({settings, fileName, dataArray})
 
