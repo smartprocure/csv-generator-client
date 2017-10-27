@@ -1,5 +1,10 @@
----
+[![npm version](https://badge.fury.io/js/csv-generator-client.svg)](https://badge.fury.io/js/csv-generator-client)
 [![CircleCI](https://circleci.com/gh/smartprocure/csv-generator-client.svg?style=svg)](https://circleci.com/gh/smartprocure/csv-generator-client)
+[![Coverage Status](https://coveralls.io/repos/github/smartprocure/csv-generator-client/badge.svg?branch=master)](https://coveralls.io/github/smartprocure/csv-generator-client?branch=master)
+[![dependencies](https://david-dm.org/smartprocure/csv-generator-client.svg)
+[![Code Climate](https://codeclimate.com/github/smartprocure/csv-generator-client/badges/gpa.svg)](https://codeclimate.com/github/smartprocure/csv-generator-client)
+
+---
 
 # csv-generator-client
 Library to generate downloadable csv files from client side data. 
