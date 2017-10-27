@@ -13,7 +13,8 @@
     "lint:ci": "npm run lint -- -o lint-results.json -f json",
     "lint-fix": "eslint dangerfile.js src/*.js test/*.js --fix",
     "danger": "duti",
-    "duti:fix": "npm run fmt && npm run lint-fix && npm run fmt"
+    "duti:fix": "npm run fmt && npm run lint-fix && npm run fmt",
+    "prepublish": "webpack"
   },
   "babel": {
     "presets": [
