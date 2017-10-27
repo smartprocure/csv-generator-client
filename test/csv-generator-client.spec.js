@@ -58,6 +58,6 @@ describe('CSV generator', () => {
   })
 
   it('get download link', () => {
-    expect(csv.getDownloadLink('|', dataArray)).to.equal('data:text/csv;charset=utf-8,MXwyfDMNCjR8NXw2fDc=')
+    expect(csv.getDownloadLink('|', dataArray)).to.equal('data:text/csv;charset=utf-8;base64,MXwyfDMNCjR8NXw2fDc=')
   })
 })
