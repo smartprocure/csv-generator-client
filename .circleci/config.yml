@@ -18,8 +18,8 @@ jobs:
           paths:
             - ./node_modules
       - run:
-          name: fmt
-          command: npm run fmt
+          name: lint
+          command: npm run lint:ci
       - run:
           name: test
           command: npm run cicoverage
@@ -31,3 +31,10 @@ jobs:
           name: danger
           command: npm run danger
           when: always
+      - deploy:
+          name: Maybe Deploy
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+              npm publish
+            fi

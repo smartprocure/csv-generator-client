@@ -1,16 +1,19 @@
 {
   "name": "csv-generator-client",
-  "version": "2.0.2",
+  "version": "2.0.4",
   "description": "Library to generate downloadable csv files from client side data.",
   "main": "lib/csv-generator-client.js",
   "scripts": {
     "build": "webpack",
     "test": "babel-node ./node_modules/mocha/bin/_mocha",
     "coverage": "nyc --require babel-core/register node_modules/.bin/mocha test",
-    "cicoverage": "nyc --reporter=lcov --require babel-core/register --require babel-polyfill mocha test --reporter json > test-results.json",    
+    "cicoverage": "nyc --reporter=lcov --require babel-core/register --require babel-polyfill mocha test --reporter json > test-results.json",
     "fmt": "prettier --write *.js; prettier --write '{src,test}/**/*.js'",
+    "lint": "eslint dangerfile.js src/*.js test/*.js",
+    "lint:ci": "npm run lint -- -o lint-results.json -f json",
+    "lint-fix": "eslint dangerfile.js src/*.js test/*.js --fix",
     "danger": "duti",
-    "duti:fix": "npm run fmt"
+    "duti:fix": "npm run fmt && npm run lint-fix && npm run fmt"
   },
   "babel": {
     "presets": [
@@ -39,11 +42,14 @@
   "homepage": "https://github.com/smartprocure/csv-generator-client#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.0.1",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "duti": "^0.7.1",
+    "eslint": "^4.9.0",
+    "eslint-config-smartprocure": "^1.0.2",
     "mocha": "^4.0.1",
     "mocha-lcov-reporter": "^1.3.0",
     "nyc": "^11.2.1",

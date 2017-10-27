@@ -1,12 +1,12 @@
 import _ from 'lodash/fp'
 
-// Aliases for unit testing purposes.
+// Aliases for unit testing.
 let _btoa =
   (typeof btoa !== 'undefined' && btoa) ||
   (typeof Buffer !== 'undefined' && (s => Buffer.from(s).toString('base64')))
 let _window = (typeof window !== 'undefined' && window) || null
 
-// This is exported for unit testing purposes.
+// This is exported for unit testing.
 export const getData = (separator, dataArray) =>
   _.flow(
     _.map(row => row.join(separator)),
@@ -23,7 +23,7 @@ export const getData = (separator, dataArray) =>
     }
   )(dataArray)
 
-// This is exported for unit testing purposes.
+// This is exported for unit testing.
 export const initSettings = (
   { separator = ',', addQuotes = false } = {},
   fileName,
@@ -49,7 +49,7 @@ let getDownloadLink = (separator, dataArray) => {
   if (typeof btoa === 'function') {
     type += ';base64'
   }
-  return type + ',' + getData(separator, dataArray)
+  return `${type},${getData(separator, dataArray)}`
 }
 
 let ieDownload = (separator, fileName, dataArray) => {
