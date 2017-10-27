@@ -18,9 +18,6 @@ jobs:
           paths:
             - ./node_modules
       - run:
-          name: fmt
-          command: npm run fmt
-      - run:
           name: test
           command: npm run cicoverage
       - run:
