@@ -33,12 +33,11 @@ export const initSettings = (
     separator = `"${separator}"`
   }
 
-  if (_.isNull(fileName)) {
+  if (_.isNil(fileName)) {
     throw 'A file name is required'
-  }
-
-  if (!_.isArray(dataArray)) {
-    throw 'A data array is required.'
+  }  
+  if (!_.isArray(dataArray) || (!_.every(a => _.isArray(a), dataArray))) {
+    throw 'A two dimensional data array is required.'
   }
 
   return { separator, fileName, dataArray }
