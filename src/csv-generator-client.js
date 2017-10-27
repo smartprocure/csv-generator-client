@@ -43,7 +43,8 @@ export const initSettings = (
   return { separator, fileName, dataArray }
 }
 
-let getDownloadLink = (separator, dataArray) => {
+// This is exported for unit testing.
+export const getDownloadLink = (separator, dataArray) => {
   let type = 'data:text/csv;charset=utf-8'
   if (typeof btoa === 'function') {
     type += ';base64'
