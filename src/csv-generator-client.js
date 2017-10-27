@@ -49,7 +49,7 @@ let getDownloadLink = (separator, dataArray) => {
   if (typeof btoa === 'function') {
     type += ';base64'
   }
-  return type + ',' + getData(separator, dataArray)
+  return `${type},${getData(separator, dataArray)}`
 }
 
 let ieDownload = (separator, fileName, dataArray) => {
