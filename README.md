@@ -1,3 +1,6 @@
+---
+[![CircleCI](https://circleci.com/gh/smartprocure/csv-generator-client.svg?style=svg)](https://circleci.com/gh/smartprocure/csv-generator-client)
+
 # csv-generator-client
 Library to generate downloadable csv files from client side data. 
 
