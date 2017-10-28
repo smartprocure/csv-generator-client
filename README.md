@@ -2,7 +2,7 @@
 [![CircleCI](https://circleci.com/gh/smartprocure/csv-generator-client.svg?style=svg)](https://circleci.com/gh/smartprocure/csv-generator-client)
 [![Coverage Status](https://coveralls.io/repos/github/smartprocure/csv-generator-client/badge.svg?branch=master)](https://coveralls.io/github/smartprocure/csv-generator-client?branch=master)
 ![dependencies](https://david-dm.org/smartprocure/csv-generator-client.svg)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7fd3b717fb744da7a3f8b27ed63fe832)](https://www.codacy.com/app/geosp/csv-generator-client?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=geosp/csv-generator-client&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/4de5e2d3d41d401d887d7db49d3a7e88)](https://www.codacy.com/app/geosp/csv-generator-client_2?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=smartprocure/csv-generator-client&amp;utm_campaign=Badge_Grade)
 [![Maintainability](https://api.codeclimate.com/v1/badges/5f3b4045e0b8f003d424/maintainability)](https://codeclimate.com/github/smartprocure/csv-generator-client/maintainability)
 
 ---
