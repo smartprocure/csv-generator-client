@@ -1,21 +1,15 @@
 import _ from 'lodash/fp'
 
-// Aliases for unit testing.
-let _btoa =
-  (typeof btoa !== 'undefined' && btoa) ||
-  (typeof Buffer !== 'undefined' && (s => Buffer.from(s).toString('base64')))
-let _window = (typeof window !== 'undefined' && window) || null
-
 // This is exported for unit testing.
 export const getData = (separator, dataArray) =>
   _.flow(
     _.map(row => row.join(separator)),
     data => data.join('\r\n'),
     data => {
-      if (_window && _window.navigator.msSaveOrOpenBlob) {
+      if ((typeof window !== 'undefined') && window.navigator.msSaveBlob) {
         return data
-      } else if (typeof _btoa === 'function') {
-        data = _btoa(data)
+      } else if (typeof btoa === 'function') {
+        data = btoa(data)
       } else {
         data = encodeURIComponent(data)
       }
@@ -46,26 +40,27 @@ export const initSettings = (
 // This is exported for unit testing.
 export const getDownloadLink = (separator, dataArray) => {
   let type = 'data:text/csv;charset=utf-8'
-  if (typeof _btoa === 'function') {
+  if (typeof btoa === 'function') {
     type += ';base64'
   }
   return `${type},${getData(separator, dataArray)}`
 }
 
-let ieDownload = (separator, fileName, dataArray) => {
+// This is exported for unit testing.
+export const ieDownload = (separator, fileName, dataArray) => {
   let blob = new Blob(
     [decodeURIComponent(encodeURI(getData(separator, dataArray)))],
     {
       type: 'text/csv;charset=utf-8;',
     }
   )
-  _window.navigator.msSaveBlob(blob, fileName)
+  window.navigator.msSaveBlob(blob, fileName)
 }
 
 export const getLinkElement = ({ settings, fileName, dataArray }) => {
   let { separator } = initSettings(settings, fileName, dataArray)
   let linkElement = document.createElement('a')
-  if (_window && _window.navigator.msSaveBlob) {
+  if (window.navigator.msSaveBlob) {
     linkElement.href = '#'
     linkElement.onclick = () => {
       ieDownload(separator, fileName, dataArray)
@@ -79,7 +74,7 @@ export const getLinkElement = ({ settings, fileName, dataArray }) => {
 
 export const download = function({ settings, fileName, dataArray }) {
   let { separator } = initSettings(settings, fileName, dataArray)
-  if (_window && _window.navigator.msSaveBlob) {
+  if (window.navigator.msSaveBlob) {
     ieDownload(separator, fileName, dataArray)
   } else {
     let linkElement = getLinkElement({ settings, fileName, dataArray })
