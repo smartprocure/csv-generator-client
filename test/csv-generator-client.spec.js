@@ -18,15 +18,16 @@ let isNotRunningIE = () =>
   (typeof btoa === 'undefined' && typeof window === 'undefined') ||
   (typeof btoa === 'undefined' &&
     typeof window !== 'undefined' &&
-    navigator.navigator &&
-    !navigator.navigator.msSaveOrOpenBlob)
+    !window.navigator.msSaveBlob)
 
 describe('CSV generator', () => {
   afterEach(() => {
     if (typeof global !== 'undefined') {
-      delete global.btoa
-      delete global.window
-      delete global.Blob
+      try {
+        delete global.btoa
+        delete global.window
+        delete global.Blob
+      } catch (e) {}
     }
   })
 
@@ -43,11 +44,11 @@ describe('CSV generator', () => {
   })
 
   it('save data with msSaveBlob', () => {
-    if (typeof global !== 'undefined') {
+    if (typeof window === 'undefined') {
       global.window = _window
     }
 
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && window.navigator.msSaveOrOpenBlob) {
       expect(csv.__internals__.getData('|', dataArray)).to.equal(
         '1|2|3\r\n4|5|6|7'
       )
@@ -63,7 +64,7 @@ describe('CSV generator', () => {
   })
 
   it('get download link with btoa', () => {
-    if (typeof global !== 'undefined') {
+    if (typeof global !== 'undefined' && typeof btoa === 'undefined') {
       global.btoa = _btoa
     }
 
@@ -83,7 +84,7 @@ describe('CSV generator', () => {
   })
 
   it('IE download', () => {
-    if (typeof global !== 'undefined') {
+    if (typeof window === 'undefined' && typeof Blob === 'undefined') {
       global.window = _window
       global.Blob = () => {}
     }
@@ -154,5 +155,27 @@ describe('CSV generator', () => {
         dataArray
       )
     ).to.deep.equal(expected)
+  })
+
+  it('download csv', () => {
+    if (typeof window !== 'undefined') {
+      expect(
+        _.bind(csv.download, null, { fileName: 'test.csv', dataArray })
+      ).to.not.throw()
+    }
+  })
+
+  it('get link element csv', () => {
+    if (
+      typeof window !== 'undefined' &&
+      isNotRunningIE() &&
+      typeof btoa === 'undefined'
+    ) {
+      let element = csv.getLinkElement({ fileName: 'test.csv', dataArray })
+      expect(element.download, 'test.csv')
+      expect(element.href).to.equal(
+        'data:text/csv;charset=utf-8,1%2C2%2C3%0D%0A4%2C5%2C6%2C7'
+      )
+    }
   })
 })
