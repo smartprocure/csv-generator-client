@@ -173,11 +173,6 @@ let customLaunchers = {
     platform: 'OS X 10.12',
     version: 'latest',
   },
-  sl_firefox_18: {
-    base: 'SauceLabs',
-    browserName: 'firefox',
-    version: '18',
-  },
   sl_firefox_30: {
     base: 'SauceLabs',
     browserName: 'firefox',
@@ -219,16 +214,6 @@ let customLaunchers = {
     browserName: 'microsoftedge',
     platform: 'Windows 10',
     version: '15',
-  },
-  sl_safari_9: {
-    base: 'SauceLabs',
-    browserName: 'safari',
-    version: '9',
-  },
-  sl_safari_10: {
-    base: 'SauceLabs',
-    browserName: 'safari',
-    version: '10',
   },
   sl_safari_latest: {
     base: 'SauceLabs',
