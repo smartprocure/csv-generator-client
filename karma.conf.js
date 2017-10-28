@@ -220,16 +220,6 @@ let customLaunchers = {
     platform: 'Windows 10',
     version: '15',
   },
-  sl_safari_7: {
-    base: 'SauceLabs',
-    browserName: 'safari',
-    version: '7',
-  },
-  sl_safari_8: {
-    base: 'SauceLabs',
-    browserName: 'safari',
-    version: '8',
-  },
   sl_safari_9: {
     base: 'SauceLabs',
     browserName: 'safari',
