@@ -5,17 +5,15 @@ import * as csv from '../src/'
 chai.expect()
 const expect = chai.expect
 
-let isNative = fn => /\{\s*\[native code\]\s*\}/.test('' + fn)
+let isNative = fn => /\{\s*\[native code\]\s*\}/.test(`${  fn}`)
 let dataArray = [[1, 2, 3], [4, 5, 6, 7]]
 let _btoa =
-  typeof Buffer !== 'undefined' && typeof btoa == 'undefined'
+  typeof Buffer !== 'undefined' && typeof btoa === 'undefined'
     ? s => Buffer.from(s).toString('base64')
-    : typeof btoa != 'undefined' ? btoa : undefined
+    : typeof btoa !== 'undefined' ? btoa : undefined
 let _window = {
   navigator: {
-    msSaveBlob: function() {
-      return arguments
-    },
+    msSaveBlob: (...args) => args,
   },
 }
 let isNotRunningIE = () =>
@@ -27,7 +25,7 @@ let isNotRunningIE = () =>
 describe('CSV generator', () => {
   afterEach(() => {
     if (typeof global !== 'undefined') {
-      if (typeof window != 'undefined' && !global.window.System) {
+      if (typeof window !== 'undefined' && !global.window.System) {
         delete global.window
       }
 
@@ -75,7 +73,7 @@ describe('CSV generator', () => {
     if (typeof global !== 'undefined' && isNotRunningIE()) {
       global.btoa = _btoa
 
-      if (typeof window == 'undefined') {
+      if (typeof window === 'undefined') {
         global.window = { navigator: {} }
       }
     }
@@ -89,7 +87,7 @@ describe('CSV generator', () => {
 
   it('get download link without btoa', () => {
     if (typeof global !== 'undefined' && isNotRunningIE()) {
-      if (typeof window == 'undefined') {
+      if (typeof window === 'undefined') {
         global.window = { navigator: {} }
       }
     }
@@ -187,7 +185,7 @@ describe('CSV generator', () => {
       let element = csv.getLinkElement({ fileName: 'test.csv', dataArray })
 
       let hrefResult =
-        typeof btoa == 'undefined'
+        typeof btoa === 'undefined'
           ? 'data:text/csv;charset=utf-8,1%2C2%2C3%0D%0A4%2C5%2C6%2C7'
           : 'data:text/csv;charset=utf-8;base64,MSwyLDMNCjQsNSw2LDc='
       expect(element.download, 'test.csv')
