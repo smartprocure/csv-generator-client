@@ -7,6 +7,8 @@
 
 ---
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/smartprocure/csv-generator-client.svg)](https://greenkeeper.io/)
+
 # csv-generator-client
 Library to generate downloadable csv files from client side data. 
 
