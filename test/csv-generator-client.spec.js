@@ -38,14 +38,16 @@ describe('CSV generator', () => {
   })
 
   it('generate data with btoa', () => {
-    if (typeof global !== 'undefined' && isNotRunningIE()) {
-      global.btoa = _btoa
-    }
-
-    if (typeof btoa !== 'undefined') {
-      expect(csv.__internals__.getData('|', dataArray)).to.equal(
-        'MXwyfDMNCjR8NXw2fDc='
-      )
+    if (isNotRunningIE()) {
+      if (typeof global !== 'undefined') {
+        global.btoa = _btoa
+      }
+  
+      if (typeof btoa !== 'undefined') {
+        expect(csv.__internals__.getData('|', dataArray)).to.equal(
+          'MXwyfDMNCjR8NXw2fDc='
+        )
+      }
     }
   })
 
@@ -70,18 +72,20 @@ describe('CSV generator', () => {
   })
 
   it('get download link with btoa', () => {
-    if (typeof global !== 'undefined' && isNotRunningIE()) {
-      global.btoa = _btoa
-
-      if (typeof window === 'undefined') {
-        global.window = { navigator: {} }
+    if (isNotRunningIE()) {
+      if (typeof global !== 'undefined') {
+        global.btoa = _btoa
+  
+        if (typeof window === 'undefined') {
+          global.window = { navigator: {} }
+        }
       }
-    }
-
-    if (typeof btoa !== 'undefined') {
-      expect(csv.__internals__.getDownloadLink('|', dataArray)).to.equal(
-        'data:text/csv;charset=utf-8;base64,MXwyfDMNCjR8NXw2fDc='
-      )
+  
+      if (typeof btoa !== 'undefined') {
+        expect(csv.__internals__.getDownloadLink('|', dataArray)).to.equal(
+          'data:text/csv;charset=utf-8;base64,MXwyfDMNCjR8NXw2fDc='
+        )
+      }
     }
   })
 
