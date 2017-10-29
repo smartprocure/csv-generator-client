@@ -33,7 +33,9 @@ describe('CSV generator', () => {
         delete global.btoa
       }
 
-      delete global.Blob
+      if (typeof Blob !== 'undefined' && !isNative(Blob)) {
+        delete global.Blob
+      }
     }
   })
 
