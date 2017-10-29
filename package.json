@@ -1,6 +1,6 @@
 {
   "name": "csv-generator-client",
-  "version": "2.0.24",
+  "version": "2.0.25",
   "description": "Library to generate downloadable csv files from client side data.",
   "main": "lib/csv-generator-client.js",
   "scripts": {
