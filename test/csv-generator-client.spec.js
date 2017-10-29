@@ -32,11 +32,11 @@ describe('CSV generator', () => {
   })
 
   it('generate data with btoa', () => {
-    if (typeof global !== 'undefined') {
+    if (typeof global !== 'undefined' && isNotRunningIE()) {
       global.btoa = _btoa
     }
 
-    if (typeof btoa !== 'undefined' && isNotRunningIE()) {
+    if (typeof btoa !== 'undefined') {
       expect(csv.__internals__.getData('|', dataArray)).to.equal(
         'MXwyfDMNCjR8NXw2fDc='
       )
@@ -64,11 +64,11 @@ describe('CSV generator', () => {
   })
 
   it('get download link with btoa', () => {
-    if (typeof global !== 'undefined' && typeof btoa === 'undefined') {
+    if (typeof global !== 'undefined' && isNotRunningIE()) {
       global.btoa = _btoa
     }
 
-    if (typeof btoa !== 'undefined' && isNotRunningIE()) {
+    if (typeof btoa !== 'undefined') {
       expect(csv.__internals__.getDownloadLink('|', dataArray)).to.equal(
         'data:text/csv;charset=utf-8;base64,MXwyfDMNCjR8NXw2fDc='
       )
