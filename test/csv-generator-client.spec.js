@@ -190,12 +190,16 @@ describe('CSV generator', () => {
     if (typeof window !== 'undefined') {
       let element = csv.getLinkElement({ fileName: 'test.csv', dataArray })
 
-      let hrefResult =
-        typeof btoa === 'undefined'
-          ? 'data:text/csv;charset=utf-8,1%2C2%2C3%0D%0A4%2C5%2C6%2C7'
-          : 'data:text/csv;charset=utf-8;base64,MSwyLDMNCjQsNSw2LDc='
-      expect(element.download, 'test.csv')
-      expect(element.href).to.equal(hrefResult)
+      if (isNotRunningIE()) {
+        let hrefResult =
+          typeof btoa === 'undefined'
+            ? 'data:text/csv;charset=utf-8,1%2C2%2C3%0D%0A4%2C5%2C6%2C7'
+            : 'data:text/csv;charset=utf-8;base64,MSwyLDMNCjQsNSw2LDc='
+        expect(element.download, 'test.csv')
+        expect(element.href).to.equal(hrefResult)
+      } else {
+        expect(typeof element.click).to.equal('function')
+      }
     }
   })
 })
