@@ -4,11 +4,8 @@
 ![dependencies](https://david-dm.org/smartprocure/csv-generator-client.svg)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/4de5e2d3d41d401d887d7db49d3a7e88)](https://www.codacy.com/app/geosp/csv-generator-client_2?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=smartprocure/csv-generator-client&amp;utm_campaign=Badge_Grade)
 [![Maintainability](https://api.codeclimate.com/v1/badges/5f3b4045e0b8f003d424/maintainability)](https://codeclimate.com/github/smartprocure/csv-generator-client/maintainability)
-
----
-
 [![Greenkeeper badge](https://badges.greenkeeper.io/smartprocure/csv-generator-client.svg)](https://greenkeeper.io/)
-
+---
 # csv-generator-client
 Library to generate downloadable csv files from client side data. 
 
