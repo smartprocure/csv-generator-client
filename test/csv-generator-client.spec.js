@@ -5,8 +5,12 @@ import * as csv from '../src/'
 chai.expect()
 const expect = chai.expect
 
+let isNative = fn => /\{\s*\[native code\]\s*\}/.test('' + fn)
 let dataArray = [[1, 2, 3], [4, 5, 6, 7]]
-let _btoa = s => Buffer.from(s).toString('base64')
+let _btoa =
+  typeof Buffer !== 'undefined' && typeof btoa == 'undefined'
+    ? s => Buffer.from(s).toString('base64')
+    : typeof btoa != 'undefined' ? btoa : undefined
 let _window = {
   navigator: {
     msSaveBlob: function() {
@@ -23,11 +27,15 @@ let isNotRunningIE = () =>
 describe('CSV generator', () => {
   afterEach(() => {
     if (typeof global !== 'undefined') {
-      try {
-        delete global.btoa
+      if (typeof window != 'undefined' && !global.window.System) {
         delete global.window
-        delete global.Blob
-      } catch (e) {}
+      }
+
+      if (typeof btoa !== 'undefined' && !isNative(btoa)) {
+        delete global.btoa
+      }
+
+      delete global.Blob
     }
   })
 
@@ -48,7 +56,7 @@ describe('CSV generator', () => {
       global.window = _window
     }
 
-    if (typeof window !== 'undefined' && window.navigator.msSaveOrOpenBlob) {
+    if (typeof window !== 'undefined' && window.navigator.msSaveBlob) {
       expect(csv.__internals__.getData('|', dataArray)).to.equal(
         '1|2|3\r\n4|5|6|7'
       )
@@ -66,6 +74,10 @@ describe('CSV generator', () => {
   it('get download link with btoa', () => {
     if (typeof global !== 'undefined' && isNotRunningIE()) {
       global.btoa = _btoa
+
+      if (typeof window == 'undefined') {
+        global.window = { navigator: {} }
+      }
     }
 
     if (typeof btoa !== 'undefined') {
@@ -76,6 +88,11 @@ describe('CSV generator', () => {
   })
 
   it('get download link without btoa', () => {
+    if (typeof global !== 'undefined' && isNotRunningIE()) {
+      if (typeof window == 'undefined') {
+        global.window = { navigator: {} }
+      }
+    }
     if (isNotRunningIE()) {
       expect(csv.__internals__.getDownloadLink('|', dataArray)).to.equal(
         'data:text/csv;charset=utf-8,1%7C2%7C3%0D%0A4%7C5%7C6%7C7'
@@ -166,16 +183,15 @@ describe('CSV generator', () => {
   })
 
   it('get link element csv', () => {
-    if (
-      typeof window !== 'undefined' &&
-      isNotRunningIE() &&
-      typeof btoa === 'undefined'
-    ) {
+    if (typeof window !== 'undefined') {
       let element = csv.getLinkElement({ fileName: 'test.csv', dataArray })
+
+      let hrefResult =
+        typeof btoa == 'undefined'
+          ? 'data:text/csv;charset=utf-8,1%2C2%2C3%0D%0A4%2C5%2C6%2C7'
+          : 'data:text/csv;charset=utf-8;base64,MSwyLDMNCjQsNSw2LDc='
       expect(element.download, 'test.csv')
-      expect(element.href).to.equal(
-        'data:text/csv;charset=utf-8,1%2C2%2C3%0D%0A4%2C5%2C6%2C7'
-      )
+      expect(element.href).to.equal(hrefResult)
     }
   })
 })
