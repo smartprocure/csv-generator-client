@@ -20,6 +20,12 @@ let isNotRunningIE = () =>
     typeof window !== 'undefined' &&
     !window.navigator.msSaveBlob)
 
+let setBtoa = () => {
+  if (typeof global !== 'undefined' && isNotRunningIE()) {
+    global.btoa = _btoa
+  }
+}
+
 describe('CSV generator', () => {
   afterEach(() => {
     if (typeof global !== 'undefined') {
@@ -32,10 +38,7 @@ describe('CSV generator', () => {
   })
 
   it('generate data with btoa', () => {
-    if (typeof global !== 'undefined' && isNotRunningIE()) {
-      global.btoa = _btoa
-    }
-
+    setBtoa()
     if (typeof btoa !== 'undefined') {
       expect(csv.__internals__.getData('|', dataArray)).to.equal(
         'MXwyfDMNCjR8NXw2fDc='
@@ -64,9 +67,7 @@ describe('CSV generator', () => {
   })
 
   it('get download link with btoa', () => {
-    if (typeof global !== 'undefined' && isNotRunningIE()) {
-      global.btoa = _btoa
-    }
+    setBtoa()
 
     if (typeof btoa !== 'undefined') {
       expect(csv.__internals__.getDownloadLink('|', dataArray)).to.equal(
