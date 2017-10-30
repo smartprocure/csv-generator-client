@@ -20,7 +20,7 @@
     "prepublish": "webpack"
   },
   "babel": {
-    "sourceMaps": true,
+    "sourceMaps": "inline",
     "retainLines": true,
     "presets": [
       "env"
