@@ -36,7 +36,7 @@ generator.download({fileName: fileName, dataArray: dataArray})
 `getLinkElement({settings: settings, fileName: fileName, dataArray: dataArray})` Where settings is an object and default settings are  `{ separator: ',', addQuotes: false }`, `fileName` is required and `dataArray` is required to be a two dimensional `Array`.
 
 ### download
-`download({settings: settings, fileName: fileName, dataArray: dataArray})` Where settings is an object and default settings are  `{ separator: ',', addQuotes: false }`, `fileName` is required and `dataArray` is required to be of type `Array`.
+`download({settings: settings, fileName: fileName, dataArray: dataArray})` Where settings is an object and default settings are  `{ separator: ',', addQuotes: false }`, `fileName` is required and `dataArray` is required to be a two dimensional `Array`.
 
 
 # Credits
