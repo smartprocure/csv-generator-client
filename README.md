@@ -6,7 +6,6 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/5f3b4045e0b8f003d424/maintainability)](https://codeclimate.com/github/smartprocure/csv-generator-client/maintainability)
 [![Greenkeeper badge](https://badges.greenkeeper.io/smartprocure/csv-generator-client.svg)](https://greenkeeper.io/)
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/smartprocure.svg)](https://saucelabs.com/u/smartprocure)
-[![Sauce Test Status](https://saucelabs.com/buildstatus/smartprocure)](https://saucelabs.com/u/smartprocure)
 ---
 # csv-generator-client
 Library to generate downloadable csv files from client side data. 
