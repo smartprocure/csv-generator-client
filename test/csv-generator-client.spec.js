@@ -7,10 +7,6 @@ const expect = chai.expect
 
 let isNative = fn => /\{\s*\[native code\]\s*\}/.test(`${fn}`)
 let dataArray = [[1, 2, 3], [4, 5, 6, 7]]
-let hrefResult = () =>
-  typeof btoa === 'undefined'
-    ? 'data:text/csv;charset=utf-8,1%7C2%7C3%0D%0A4%7C5%7C6%7C7'
-    : 'data:text/csv;charset=utf-8;base64,MSwyLDMNCjQsNSw2LDc='
 let _btoa =
   typeof Buffer !== 'undefined' && typeof btoa === 'undefined'
     ? s => Buffer.from(s, 'utf8').toString('base64')
@@ -69,16 +65,6 @@ describe('CSV generator', () => {
     }
   })
 
-  it('generate data with encodeURIComponent', () => {
-    if (isNotRunningIE()) {
-      let expectedData =
-        typeof btoa === 'undefined'
-          ? '1%7C2%7C3%0D%0A4%7C5%7C6%7C7'
-          : 'MXwyfDMNCjR8NXw2fDc='
-      expect(csv.__internals__.getData('|', dataArray)).to.equal(expectedData)
-    }
-  })
-
   it('get download link with btoa', () => {
     if (isNotRunningIE()) {
       if (typeof global !== 'undefined') {
@@ -94,20 +80,6 @@ describe('CSV generator', () => {
           'data:text/csv;charset=utf-8;base64,MXwyfDMNCjR8NXw2fDc='
         )
       }
-    }
-  })
-
-  it('get download link without btoa', () => {
-    if (typeof global !== 'undefined' && isNotRunningIE()) {
-      if (typeof window === 'undefined') {
-        global.window = { navigator: {} }
-      }
-    }
-
-    if (typeof btoa === 'undefined') {
-      expect(csv.__internals__.getDownloadLink('|', dataArray)).to.equal(
-        hrefResult()
-      )
     }
   })
 
@@ -199,7 +171,7 @@ describe('CSV generator', () => {
 
       if (isNotRunningIE()) {
         expect(element.download, 'test.csv')
-        expect(element.href).to.equal(hrefResult())
+        expect(element.href).to.equal('data:text/csv;charset=utf-8;base64,MSwyLDMNCjQsNSw2LDc=')
       } else {
         expect(typeof element.click).to.equal('function')
       }
