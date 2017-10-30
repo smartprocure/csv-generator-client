@@ -171,7 +171,9 @@ describe('CSV generator', () => {
 
       if (isNotRunningIE()) {
         expect(element.download, 'test.csv')
-        expect(element.href).to.equal('data:text/csv;charset=utf-8;base64,MSwyLDMNCjQsNSw2LDc=')
+        expect(element.href).to.equal(
+          'data:text/csv;charset=utf-8;base64,MSwyLDMNCjQsNSw2LDc='
+        )
       } else {
         expect(typeof element.click).to.equal('function')
       }
