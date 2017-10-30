@@ -4,17 +4,10 @@ let getData = (separator, dataArray) =>
   _.flow(
     _.map(row => row.join(separator)),
     data => data.join('\r\n'),
-    data => {
-      // Checking for window undefined for unit testing under node.
-      if (typeof window !== 'undefined' && window.navigator.msSaveBlob) {
-        return data
-      } else if (typeof btoa === 'function') {
-        data = btoa(data)
-      } else {
-        data = encodeURIComponent(data)
-      }
-      return data
-    }
+    data =>
+      typeof window !== 'undefined' && window.navigator.msSaveBlob
+        ? data
+        : btoa(data)
   )(dataArray)
 
 let initSettings = (
