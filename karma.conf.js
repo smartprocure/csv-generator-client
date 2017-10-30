@@ -233,13 +233,6 @@ let customLaunchers = {
     deviceName: 'iPhone 7 Plus Simulator',
     deviceOrientation: 'portrait',
   },
-  sl_iphone_110: {
-    base: 'SauceLabs',
-    browserName: 'iphone',
-    version: '11.0',
-    deviceName: 'iPhone 8 Plus',
-    deviceOrientation: 'portrait',
-  },
   sl_ipad_103: {
     base: 'SauceLabs',
     browserName: 'ipad',
