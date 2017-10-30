@@ -21,7 +21,10 @@ let _window = {
   },
 }
 let isNotRunningIE = () =>
-  typeof window !== 'undefined' && !window.navigator.msSaveBlob
+  (typeof btoa === 'undefined' && typeof window === 'undefined') ||
+  (typeof btoa === 'undefined' &&
+    typeof window !== 'undefined' &&
+    !window.navigator.msSaveBlob)
 
 describe('CSV generator', () => {
   afterEach(() => {
@@ -70,7 +73,7 @@ describe('CSV generator', () => {
     if (isNotRunningIE()) {
       let expectedData =
         typeof btoa === 'undefined'
-          ? '1%2C2%2C3%0D%0A4%2C5%2C6%2C7'
+          ? '1%7C2%7C3%0D%0A4%7C5%7C6%7C7'
           : 'MXwyfDMNCjR8NXw2fDc='
       expect(csv.__internals__.getData('|', dataArray)).to.equal(expectedData)
     }
