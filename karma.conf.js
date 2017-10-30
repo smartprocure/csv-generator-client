@@ -191,6 +191,18 @@ let customLaunchers = {
     platform: 'OS X 10.12',
     version: 'latest',
   },
+  sl_ie_10: {
+    base: 'SauceLabs',
+    browserName: 'internet explorer',
+    platform: 'Windows 8',
+    version: '10',
+  },
+  sl_ie_11: {
+    base: 'SauceLabs',
+    browserName: 'internet explorer',
+    platform: 'Windows 8.1',
+    version: '11',
+  },
   sl_edge_13: {
     base: 'SauceLabs',
     browserName: 'microsoftedge',
