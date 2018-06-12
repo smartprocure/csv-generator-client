@@ -33,11 +33,58 @@ generator.download({fileName: fileName, dataArray: dataArray})
 # API
 
 ### getLinkElement
-`getLinkElement({settings: settings, fileName: fileName, dataArray: dataArray})` Where settings is an object and default settings are  `{ separator: ',', addQuotes: false }`, `fileName` is required and `dataArray` is required to be a two dimensional `Array`.
+`getLinkElement({settings: settings, fileName: fileName, dataArray: dataArray})`
+
+Where settings can be:
+
+```javascript
+{
+  separator: String,
+  addQuotes: Boolean,
+  autoDetectColumns: Boolean, // Requires an array of objects (e.g., [{name: 'Bob'}, {name: 'Joe'}])
+  columnKeys: [String] // Each element is a key in the row object (e.g., 'name')
+}
+```
+
+Default settings are:
+
+```javascript
+{
+  separator: ',',
+  addQuotes: false,
+  autoDetectColumns: false,
+}
+```
+
+`fileName` is required
+`dataArray` is required to be an array of objects if `autoDetectColumns` is `true`, otherwise an array of arrays.
 
 ### download
-`download({settings: settings, fileName: fileName, dataArray: dataArray})` Where settings is an object and default settings are  `{ separator: ',', addQuotes: false }`, `fileName` is required and `dataArray` is required to be a two dimensional `Array`.
+`download({settings: settings, fileName: fileName, dataArray: dataArray})`
 
+Where settings can be:
+
+```javascript
+{
+  separator: String,
+  addQuotes: Boolean,
+  autoDetectColumns: Boolean, // Requires an array of objects (e.g., [{name: 'Bob'}, {name: 'Joe'}])
+  columnKeys: [String] // Each element is a key in the row object (e.g., 'name')
+}
+```
+
+Default settings are:
+
+```javascript
+{
+  separator: ',',
+  addQuotes: false,
+  autoDetectColumns: false,
+}
+```
+
+`fileName` is required
+`dataArray` is required to be an array of objects if `autoDetectColumns` is `true`, otherwise an array of arrays.
 
 # Credits
 This implementation is based on [csv-repository-client](https://github.com/AlexLibs/client-side-csv-generator) by [AlexLibs](https://github.com/AlexLibs)
