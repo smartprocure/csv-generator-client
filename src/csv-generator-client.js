@@ -9,6 +9,7 @@ let quote = _.flow(
 // Quote if needed
 let transformCell = addQuotes => (addQuotes ? quote : _.identity)
 
+// Takes settings object and an array of arrays
 let getData = ({ separator, addQuotes }, dataArray) => {
   let transformRow = _.flow(
     _.map(transformCell(addQuotes)),
@@ -57,15 +58,13 @@ let checkInputs = ({ autoDetectColumns }, fileName, dataArray) => {
   }
 }
 
-let initSettingsAndData = (settings, dataArray) => {
-  settings = _.defaults(
-    {
-      separator: ',',
-      addQuotes: false,
-      autoDetectColumns: false,
-    },
-    settings
-  )
+let initSettings = _.defaults({
+  separator: ',',
+  addQuotes: false,
+  autoDetectColumns: false,
+})
+
+let initData = (settings, dataArray) => {
   let { autoDetectColumns, columnKeys } = settings
 
   if (autoDetectColumns) {
@@ -76,22 +75,22 @@ let initSettingsAndData = (settings, dataArray) => {
     dataArray = convertData(dataArray, columnKeys)
   }
 
-  return { _settings: settings, _dataArray: dataArray }
+  return dataArray
 }
 
 let getDownloadLink = (settings, dataArray) => {
-  let { _settings, _dataArray } = initSettingsAndData(settings, dataArray)
+  let _dataArray = initData(settings, dataArray)
   let type = 'data:text/csv;charset=utf-8'
   if (typeof btoa === 'function') {
     type += ';base64'
   }
-  return `${type},${getData(_settings, _dataArray)}`
+  return `${type},${getData(settings, _dataArray)}`
 }
 
 let ieDownload = (settings, fileName, dataArray) => {
-  let { _settings, _dataArray } = initSettingsAndData(settings, dataArray)
+  let _dataArray = initData(settings, dataArray)
   let blob = new Blob(
-    [decodeURIComponent(encodeURI(getData(_settings, _dataArray)))],
+    [decodeURIComponent(encodeURI(getData(settings, _dataArray)))],
     {
       type: 'text/csv;charset=utf-8;',
     }
@@ -117,19 +116,25 @@ let getLinkElementInternal = (settings, fileName, dataArray) => {
 }
 
 export const getLinkElement = ({ settings, fileName, dataArray }) => {
-  checkInputs(settings, fileName, dataArray)
+  // Initialize settings
+  let _settings = initSettings(settings)
+  // Check inputs
+  checkInputs(_settings, fileName, dataArray)
 
-  return getLinkElementInternal(settings, fileName, dataArray)
+  return getLinkElementInternal(_settings, fileName, dataArray)
 }
 
 export const download = function({ settings, fileName, dataArray }) {
-  checkInputs(settings, fileName, dataArray)
+  // Initialize settings
+  let _settings = initSettings(settings)
+  // Check inputs
+  checkInputs(_settings, fileName, dataArray)
 
   // IE
   if (window.navigator.msSaveBlob) {
-    ieDownload(settings, fileName, dataArray)
+    ieDownload(_settings, fileName, dataArray)
   } else {
-    let linkElement = getLinkElementInternal(settings, fileName, dataArray)
+    let linkElement = getLinkElementInternal(_settings, fileName, dataArray)
     linkElement.style.display = 'none'
     document.body.appendChild(linkElement)
     linkElement.click()
@@ -145,7 +150,8 @@ export const __internals__ = {
   getData,
   getDownloadLink,
   ieDownload,
-  initSettingsAndData,
+  initData,
+  initSettings,
   quote,
   transformCell,
 }
