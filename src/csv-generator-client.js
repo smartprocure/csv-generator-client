@@ -124,7 +124,7 @@ export const getLinkElement = ({ settings, fileName, dataArray }) => {
   return getLinkElementInternal(_settings, fileName, dataArray)
 }
 
-export const download = function({ settings, fileName, dataArray }) {
+export const download = ({ settings, fileName, dataArray }) => {
   // Initialize settings
   let _settings = initSettings(settings)
   // Check inputs
