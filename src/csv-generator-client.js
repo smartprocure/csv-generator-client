@@ -1,45 +1,96 @@
 import _ from 'lodash/fp'
 
-let getData = (separator, dataArray) =>
-  _.flow(
-    _.map(row => row.join(separator)),
+// Escape quotes and quote cell
+let quote = _.flow(
+  _.replace(/"/g, '""'),
+  x => `"${x}"`
+)
+
+// Quote if needed
+let transformCell = addQuotes => (addQuotes ? quote : _.identity)
+
+// Takes settings object and an array of arrays
+let getData = ({ separator, addQuotes }, dataArray) => {
+  let transformRow = _.flow(
+    _.map(transformCell(addQuotes)),
+    _.join(separator)
+  )
+
+  return _.flow(
+    _.map(transformRow),
     data => data.join('\r\n'),
     data =>
       typeof window !== 'undefined' && window.navigator.msSaveBlob
         ? data
         : btoa(data)
   )(dataArray)
+}
 
-let initSettings = (
-  { separator = ',', addQuotes = false } = {},
-  fileName,
-  dataArray
-) => {
-  if (addQuotes) {
-    separator = `"${separator}"`
-  }
+// Convert array of objects to array of arrays and add columns
+let convertData = (data, columnKeys) => {
+  // Column names
+  let columns = _.map(_.startCase, columnKeys)
+  // Extract data from object
+  let transformRow = row => _.map(key => _.get(key, row), columnKeys)
+  let rows = _.map(transformRow, data)
+  // Concatenate columns and rows
+  return _.concat([columns], rows)
+}
 
+// Extract keys from first row
+let extractKeysFromFirstRow = _.flow(
+  _.first,
+  _.keys
+)
+
+let checkInputs = ({ autoDetectColumns }, fileName, dataArray) => {
+  // Check filename
   if (_.isNil(fileName)) {
     throw 'A file name is required'
   }
-  if (!_.isArray(dataArray) || !_.every(a => _.isArray(a), dataArray)) {
-    throw 'A two dimensional data array is required.'
-  }
 
-  return { separator, fileName, dataArray }
+  // Check shape of data
+  if (autoDetectColumns) {
+    if (!_.isArray(dataArray) || !_.every(_.isPlainObject, dataArray))
+      throw 'An array of objects is required.'
+  } else if (!_.isArray(dataArray) || !_.every(_.isArray, dataArray)) {
+    throw 'An array of arrays is required.'
+  }
 }
 
-let getDownloadLink = (separator, dataArray) => {
+let initSettings = _.defaults({
+  separator: ',',
+  addQuotes: false,
+  autoDetectColumns: false,
+})
+
+let initData = (settings, dataArray) => {
+  let { autoDetectColumns, columnKeys } = settings
+
+  if (autoDetectColumns) {
+    // Extract column keys from first row if not passed explicitly
+    if (!_.isArray(columnKeys)) columnKeys = extractKeysFromFirstRow(dataArray)
+
+    // Convert array of objects to array of arrays and add columns
+    dataArray = convertData(dataArray, columnKeys)
+  }
+
+  return dataArray
+}
+
+let getDownloadLink = (settings, dataArray) => {
+  let _dataArray = initData(settings, dataArray)
   let type = 'data:text/csv;charset=utf-8'
   if (typeof btoa === 'function') {
     type += ';base64'
   }
-  return `${type},${getData(separator, dataArray)}`
+  return `${type},${getData(settings, _dataArray)}`
 }
 
-let ieDownload = (separator, fileName, dataArray) => {
+let ieDownload = (settings, fileName, dataArray) => {
+  let _dataArray = initData(settings, dataArray)
   let blob = new Blob(
-    [decodeURIComponent(encodeURI(getData(separator, dataArray)))],
+    [decodeURIComponent(encodeURI(getData(settings, _dataArray)))],
     {
       type: 'text/csv;charset=utf-8;',
     }
@@ -47,29 +98,43 @@ let ieDownload = (separator, fileName, dataArray) => {
   window.navigator.msSaveBlob(blob, fileName)
 }
 
-export const getLinkElement = ({ settings, fileName, dataArray }) => {
-  let { separator } = initSettings(settings, fileName, dataArray)
+let getLinkElementInternal = (settings, fileName, dataArray) => {
   let linkElement = document.createElement('a')
   linkElement.target = '_blank'
 
+  // IE
   if (window.navigator.msSaveBlob) {
     linkElement.href = '#'
     linkElement.onclick = () => {
-      ieDownload(separator, fileName, dataArray)
+      ieDownload(settings, fileName, dataArray)
     }
   } else {
-    linkElement.href = getDownloadLink(separator, dataArray)
+    linkElement.href = getDownloadLink(settings, dataArray)
     linkElement.download = fileName
   }
   return linkElement
 }
 
-export const download = function({ settings, fileName, dataArray }) {
-  let { separator } = initSettings(settings, fileName, dataArray)
+export const getLinkElement = ({ settings, fileName, dataArray }) => {
+  // Initialize settings
+  let _settings = initSettings(settings)
+  // Check inputs
+  checkInputs(_settings, fileName, dataArray)
+
+  return getLinkElementInternal(_settings, fileName, dataArray)
+}
+
+export const download = ({ settings, fileName, dataArray }) => {
+  // Initialize settings
+  let _settings = initSettings(settings)
+  // Check inputs
+  checkInputs(_settings, fileName, dataArray)
+
+  // IE
   if (window.navigator.msSaveBlob) {
-    ieDownload(separator, fileName, dataArray)
+    ieDownload(_settings, fileName, dataArray)
   } else {
-    let linkElement = getLinkElement({ settings, fileName, dataArray })
+    let linkElement = getLinkElementInternal(_settings, fileName, dataArray)
     linkElement.style.display = 'none'
     document.body.appendChild(linkElement)
     linkElement.click()
@@ -79,8 +144,14 @@ export const download = function({ settings, fileName, dataArray }) {
 
 // Exporting internals for unit testing.
 export const __internals__ = {
+  checkInputs,
+  convertData,
+  extractKeysFromFirstRow,
   getData,
-  initSettings,
   getDownloadLink,
   ieDownload,
+  initData,
+  initSettings,
+  quote,
+  transformCell,
 }
