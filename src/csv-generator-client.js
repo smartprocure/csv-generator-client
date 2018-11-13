@@ -22,7 +22,7 @@ let getData = ({ separator, addQuotes }, dataArray) => {
     data =>
       typeof window !== 'undefined' && window.navigator.msSaveBlob
         ? data
-        : btoa(data)
+        : btoa(unescape(encodeURIComponent(data)))
   )(dataArray)
 }
 
