@@ -54,7 +54,7 @@
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "coveralls": "^3.0.0",
-    "duti": "^0.8.0",
+    "duti": "^0.15.0",
     "eslint": "^4.9.0",
     "eslint-config-smartprocure": "^1.0.2",
     "karma": "^1.7.1",
